@@ -14,6 +14,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill((0, 0, 0))
+        player_variable.update(delta_time)
         player_variable.draw(screen)
         pygame.display.flip()
         delta_time = game_clock.tick(60) / 1000
