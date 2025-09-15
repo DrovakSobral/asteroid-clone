@@ -3,6 +3,7 @@ import constants
 import player
 import asteroid
 import asteroidfield
+import shot
 
 
 def main():
@@ -13,6 +14,7 @@ def main():
     updatables_container = pygame.sprite.Group()
     drawables_container = pygame.sprite.Group()
     asteroids_container = pygame.sprite.Group()
+    shots_container = pygame.sprite.Group()
 
     player.Player.containers = (updatables_container, drawables_container)
     asteroid.Asteroid.containers = (
@@ -21,6 +23,7 @@ def main():
         drawables_container,
     )
     asteroidfield.AsteroidField.containers = updatables_container
+    shot.Shot.containers = (shots_container, updatables_container, drawables_container)
 
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
     # This is the variable that holds the player object
@@ -33,8 +36,22 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+
         screen.fill((0, 0, 0))
+
         updatables_container.update(delta_time)
+
+        for asteroid_item in asteroids_container:
+            if asteroid_item.collision_detected(player_variable):
+                print("Game over!")
+                exit(0)
+
+        for asteroid_item in asteroids_container:
+            for shot_item in shots_container:
+                if asteroid_item.collision_detected(shot_item):
+                    asteroid_item.kill()
+                    shot_item.kill()
+
         for item in drawables_container:
             item.draw(screen)
         pygame.display.flip()
