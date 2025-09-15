@@ -49,7 +49,7 @@ def main():
         for asteroid_item in asteroids_container:
             for shot_item in shots_container:
                 if asteroid_item.collision_detected(shot_item):
-                    asteroid_item.kill()
+                    asteroid_item.split()
                     shot_item.kill()
 
         for item in drawables_container:
